@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<h2 class="fw-bold mb-4">My Orders</h2>
+
+{% if orders %}
+    <div class="row g-4">
+        {% for order in orders %}
+        <div class="col-md-4">
+            <div class="p-3 shadow bg-white rounded">
+                <h5>Order #{{ order.id }}</h5>
+                <p>Status: <strong>{{ order.status }}</strong></p>
+                <p>Total: ₹{{ order.total_amount }}</p>
+                <a href="/orders/{{ order.id }}/" class="btn btn-primary-custom btn-sm">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">No orders yet.</p>
+{% endif %}
+{% endblock %}

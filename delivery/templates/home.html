@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery App</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836') center/cover no-repeat;
+            height: 70vh;
+            border-radius: 20px;
+        }
+        .overlay {
+            background: rgba(0,0,0,0.55);
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .nav-link {
+            font-weight: 600;
+        }
+        .btn-custom {
+            background: #ff5722;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: .3s;
+        }
+        .btn-custom:hover {
+            background: #e64a19;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <div class="container">
+        <a class="navbar-brand fs-3 fw-bold" href="/">Foodie</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login/">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user-orders/">My Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/swagger/">API Docs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="container mt-5">
+    <div class="hero">
+        <div class="overlay">
+            <div>
+                <h1 class="fw-bold display-4">Welcome to Foodie Delivery</h1>
+                <p class="lead mt-3 mb-4">Fast, Delicious & Delivered Hot. Order your favourite meals now.</p>
+                <a href="/login/" class="btn btn-custom">Get Started</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="container text-center my-5">
+    <h2 class="fw-semibold mb-4">Why Choose Us?</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="p-4 bg-white shadow rounded">
+                <h4>🚀 Fast Delivery</h4>
+                <p class="mt-2">Your food arrives fresh & on time, every time.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 bg-white shadow rounded">
+                <h4>🍔 Top Restaurants</h4>
+                <p class="mt-2">Order meals from popular restaurants near you.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 bg-white shadow rounded">
+                <h4>📱 Easy to Use</h4>
+                <p class="mt-2">Simple and smooth interface for fast ordering.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-3 bg-white shadow-sm mt-4">
+    <p class="mb-0">&copy; 2025 Foodie Delivery | All Rights Reserved</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

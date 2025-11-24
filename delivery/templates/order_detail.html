@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Order Details{% endblock %}
+
+{% block content %}
+<h2>Order #{{ order.id }}</h2>
+
+<div class="shadow p-4 bg-white rounded mt-3">
+
+    <h5>Status: {{ order.status }}</h5>
+    <p>Total Amount: ₹{{ order.total_amount }}</p>
+    <p>Placed On: {{ order.created_at }}</p>
+
+    <h4 class="mt-4">Items</h4>
+    <ul>
+        {% for item in order.items %}
+            <li>{{ item.name }} — ₹{{ item.price }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/user-orders/" class="btn btn-primary-custom mt-3">Back to Orders</a>
+</div>
+{% endblock %}
