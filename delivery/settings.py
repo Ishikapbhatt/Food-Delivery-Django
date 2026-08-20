@@ -51,11 +51,14 @@ INSTALLED_APPS = [
 
     'authentication.apps.AuthenticationConfig',
     'orders.apps.OrdersConfig',
+    'restaurants.apps.RestaurantsConfig',
 
     # thirrdparty apps
     'rest_framework',
     'djoser',
-    'drf_yasg'
+    'drf_yasg',
+    'phonenumber_field',
+    'django_filters'
 ]
 
 AUTH_USER_MODEL = 'authentication.User'

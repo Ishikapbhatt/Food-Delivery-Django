@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants - Foodie Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #ff5722 !important;
+        }
+        .hero-search {
+            background: linear-gradient(135deg, #ff5722 0%, #ff7043 100%);
+            padding: 60px 0;
+            color: white;
+        }
+        .search-box {
+            background: white;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .search-box input {
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            width: 100%;
+        }
+        .search-box button {
+            border-radius: 50px;
+            padding: 10px 30px;
+        }
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .restaurant-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .restaurant-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .restaurant-info {
+            padding: 20px;
+        }
+        .rating-badge {
+            background: #24963f;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .price-range {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .cuisine-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .cuisine-tag {
+            background: #f8f9fa;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .delivery-time {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .featured-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff5722;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #333 !important;
+        }
+        .nav-link:hover {
+            color: #ff5722 !important;
+        }
+        .btn-primary-custom {
+            background: #ff5722;
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background: #e64a19;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <div class="container">
+        <a class="navbar-brand fs-3" href="/">Foodie</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/restaurants/">Restaurants</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart/">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-orders/">My Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login/">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SEARCH SECTION -->
+<div class="hero-search">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="fw-bold mb-4">Discover the best food & drinks</h1>
+                <div class="search-box">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for restaurants, cuisines..." id="searchInput">
+                        <button class="btn btn-primary-custom" type="button" onclick="searchRestaurants()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FILTERS -->
+<div class="container mt-4">
+    <div class="filter-section">
+        <div class="row align-items-center">
+            <div class="col-md-2">
+                <h6 class="fw-bold mb-0">Filters:</h6>
+            </div>
+            <div class="col-md-10">
+                <div class="d-flex gap-2 flex-wrap">
+                    <select class="form-select form-select-sm" style="width: auto;" id="cuisineFilter" onchange="filterRestaurants()">
+                        <option value="">All Cuisines</option>
+                    </select>
+                    <select class="form-select form-select-sm" style="width: auto;" id="priceFilter" onchange="filterRestaurants()">
+                        <option value="">Price Range</option>
+                        <option value="$">$ (Budget)</option>
+                        <option value="$$">$$ (Moderate)</option>
+                        <option value="$$$">$$$ (Expensive)</option>
+                        <option value="$$$$">$$$$ (Fine Dining)</option>
+                    </select>
+                    <select class="form-select form-select-sm" style="width: auto;" id="ratingFilter" onchange="filterRestaurants()">
+                        <option value="">Rating</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="3">3+ Stars</option>
+                        <option value="2">2+ Stars</option>
+                    </select>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RESTAURANTS GRID -->
+<div class="container my-5">
+    <h2 class="fw-bold mb-4">Popular Restaurants</h2>
+    <div class="row" id="restaurantsGrid">
+        <!-- Restaurant cards will be loaded here -->
+    </div>
+    <div class="text-center mt-4" id="loadingSpinner" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div class="text-center mt-4" id="noResults" style="display: none;">
+        <p class="text-muted">No restaurants found matching your criteria.</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-4 bg-white shadow-sm mt-5">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 Foodie Delivery | All Rights Reserved</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const API_BASE = '/api';
+
+async function loadCuisines() {
+    try {
+        const response = await fetch(`${API_BASE}/cuisines/`);
+        const cuisines = await response.json();
+        const select = document.getElementById('cuisineFilter');
+        cuisines.forEach(cuisine => {
+            const option = document.createElement('option');
+            option.value = cuisine.name;
+            option.textContent = cuisine.name;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading cuisines:', error);
+    }
+}
+
+async function loadRestaurants(filters = {}) {
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('noResults').style.display = 'none';
+    
+    try {
+        let url = `${API_BASE}/restaurants/`;
+        const params = new URLSearchParams();
+        
+        if (filters.cuisine) params.append('cuisine', filters.cuisine);
+        if (filters.price_range) params.append('price_range', filters.price_range);
+        if (filters.search) params.append('search', filters.search);
+        
+        if (params.toString()) {
+            url += `?${params.toString()}`;
+        }
+        
+        const response = await fetch(url);
+        const restaurants = await response.json();
+        
+        displayRestaurants(restaurants);
+        
+        // Apply client-side rating filter
+        if (filters.rating) {
+            const minRating = parseFloat(filters.rating);
+            const filtered = restaurants.filter(r => r.average_rating >= minRating);
+            displayRestaurants(filtered);
+        }
+    } catch (error) {
+        console.error('Error loading restaurants:', error);
+        document.getElementById('noResults').style.display = 'block';
+    } finally {
+        document.getElementById('loadingSpinner').style.display = 'none';
+    }
+}
+
+function displayRestaurants(restaurants) {
+    const grid = document.getElementById('restaurantsGrid');
+    grid.innerHTML = '';
+    
+    if (restaurants.length === 0) {
+        document.getElementById('noResults').style.display = 'block';
+        return;
+    }
+    
+    restaurants.forEach(restaurant => {
+        const card = document.createElement('div');
+        card.className = 'col-md-4 mb-4';
+        card.innerHTML = `
+            <div class="restaurant-card position-relative" onclick="viewRestaurant(${restaurant.id})">
+                ${restaurant.is_featured ? '<span class="featured-badge">Featured</span>' : ''}
+                <img src="${restaurant.image || 'https://via.placeholder.com/400x200'}" 
+                     class="restaurant-image" alt="${restaurant.name}">
+                <div class="restaurant-info">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0">${restaurant.name}</h5>
+                        <span class="rating-badge">${restaurant.average_rating.toFixed(1)} ★</span>
+                    </div>
+                    <div class="cuisine-tags mb-2">
+                        ${restaurant.cuisine_names.map(cuisine => `<span class="cuisine-tag">${cuisine}</span>`).join('')}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-range">${restaurant.price_range}</span>
+                        <span class="delivery-time">
+                            <i class="fas fa-clock"></i> 25-35 min
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-0 mt-2">${restaurant.description.substring(0, 80)}...</p>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function viewRestaurant(id) {
+    window.location.href = `/restaurant/${id}/`;
+}
+
+function searchRestaurants() {
+    const search = document.getElementById('searchInput').value;
+    const cuisine = document.getElementById('cuisineFilter').value;
+    const price_range = document.getElementById('priceFilter').value;
+    const rating = document.getElementById('ratingFilter').value;
+    
+    loadRestaurants({ search, cuisine, price_range, rating });
+}
+
+function filterRestaurants() {
+    searchRestaurants();
+}
+
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('cuisineFilter').value = '';
+    document.getElementById('priceFilter').value = '';
+    document.getElementById('ratingFilter').value = '';
+    loadRestaurants();
+}
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', () => {
+    loadCuisines();
+    loadRestaurants();
+});
+</script>
+</body>
+</html>

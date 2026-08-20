@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Address
 from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
 from django.contrib.auth.hashers import make_password
@@ -34,3 +34,34 @@ class UserCreationSerializer(serializers.ModelSerializer):
         # Hash password before saving
         validated_data["password"] = make_password(validated_data["password"])
         return super().create(validated_data)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'phone_number', 'first_name', 'last_name', 
+                  'full_name', 'profile_picture', 'date_of_birth']
+        read_only_fields = ['id', 'username', 'email', 'phone_number']
+    
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}".strip()
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+        read_only_fields = ['user']
+    
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        # If this is set as default, remove default from other addresses
+        if validated_data.get('is_default'):
+            Address.objects.filter(user=validated_data['user'], is_default=True).update(is_default=False)
+        return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        # If this is set as default, remove default from other addresses
+        if validated_data.get('is_default'):
+            Address.objects.filter(user=instance.user, is_default=True).exclude(id=instance.id).update(is_default=False)
+        return super().update(instance, validated_data)

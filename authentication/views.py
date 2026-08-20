@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
-from .models import User
+from .models import User, Address
 from . import serializers
 
 # Create your views here.
@@ -29,3 +30,24 @@ class UserCreateView(generics.GenericAPIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        return self.request.user
+
+class AddressListView(generics.ListCreateAPIView):
+    serializer_class = serializers.AddressSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+class AddressDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.AddressSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)

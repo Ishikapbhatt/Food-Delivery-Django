@@ -4,7 +4,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views import home, login_page, orders_page
+from .views import home, login_page, orders_page, restaurants_page, restaurant_detail, cart_page
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -22,6 +22,9 @@ urlpatterns = [
     path('', home, name='home'),
     path('login/', login_page, name='login'),
     path('user-orders/', orders_page, name='orders-page'),
+    path('restaurants/', restaurants_page, name='restaurants-page'),
+    path('restaurant/<int:restaurant_id>/', restaurant_detail, name='restaurant-detail'),
+    path('cart/', cart_page, name='cart-page'),
 
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -31,6 +34,7 @@ urlpatterns = [
 
     path("auth/", include("authentication.urls")),
     path("orders/", include("orders.urls")),
+    path("api/", include("restaurants.urls")),
 
     # --- Correct Djoser Auth URLs ---
     path("auth/", include("djoser.urls")),

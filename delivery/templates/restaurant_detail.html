@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu - Foodie Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #ff5722 !important;
+        }
+        .restaurant-header {
+            background: linear-gradient(135deg, #ff5722 0%, #ff7043 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .restaurant-cover {
+            height: 300px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .restaurant-info-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+        .rating-badge {
+            background: #24963f;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .menu-category {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .menu-item {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s;
+        }
+        .menu-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .menu-item-image {
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            width: 100%;
+        }
+        .vegetarian-badge {
+            background: #24963f;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        .spicy-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        .cart-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ff5722;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(255, 87, 34, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        .cart-float:hover {
+            transform: scale(1.05);
+        }
+        .cart-count {
+            background: white;
+            color: #ff5722;
+            padding: 2px 10px;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        .btn-add-cart {
+            background: #ff5722;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .btn-add-cart:hover {
+            background: #e64a19;
+            color: white;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .quantity-btn:hover {
+            background: #f8f9fa;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #333 !important;
+        }
+        .nav-link:hover {
+            color: #ff5722 !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <div class="container">
+        <a class="navbar-brand fs-3" href="/">Foodie</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/restaurants/">Restaurants</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart/">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-orders/">My Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login/">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- RESTAURANT HEADER -->
+<div class="restaurant-header">
+    <img src="" class="restaurant-cover" id="restaurantCover" alt="Restaurant Cover">
+</div>
+
+<div class="container">
+    <div class="restaurant-info-card p-4 mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="fw-bold" id="restaurantName">Loading...</h1>
+                <div class="d-flex gap-3 mb-3">
+                    <span class="rating-badge" id="restaurantRating">0.0 ★</span>
+                    <span class="text-white" id="restaurantPrice">$$</span>
+                    <span class="text-white" id="restaurantCuisine">Cuisine</span>
+                </div>
+                <p class="mb-0" id="restaurantAddress">Address</p>
+                <p class="mb-0 small" id="restaurantPhone">Phone</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="d-flex flex-column gap-2">
+                    <span class="text-white"><i class="fas fa-clock"></i> <span id="restaurantHours">Hours</span></span>
+                    <span class="text-white"><i class="fas fa-motorcycle"></i> Free Delivery</span>
+                    <span class="text-white"><i class="fas fa-star"></i> <span id="restaurantReviews">0</span> reviews</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENU SECTIONS -->
+    <div id="menuContainer">
+        <!-- Menu categories will be loaded here -->
+    </div>
+</div>
+
+<!-- FLOATING CART BUTTON -->
+<div class="cart-float" onclick="goToCart()">
+    <i class="fas fa-shopping-cart"></i> Cart
+    <span class="cart-count" id="cartCount">0</span>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-4 bg-white shadow-sm mt-5">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 Foodie Delivery | All Rights Reserved</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const API_BASE = '/api';
+let currentRestaurantId = null;
+let cartItems = {};
+
+async function loadRestaurant(id) {
+    currentRestaurantId = id;
+    try {
+        const response = await fetch(`${API_BASE}/restaurants/${id}/`);
+        const restaurant = await response.json();
+        
+        document.getElementById('restaurantName').textContent = restaurant.name;
+        document.getElementById('restaurantRating').textContent = `${restaurant.average_rating.toFixed(1)} ★`;
+        document.getElementById('restaurantPrice').textContent = restaurant.price_range;
+        document.getElementById('restaurantCuisine').textContent = restaurant.cuisine_names.join(', ');
+        document.getElementById('restaurantAddress').textContent = restaurant.address;
+        document.getElementById('restaurantPhone').textContent = restaurant.phone_number;
+        document.getElementById('restaurantHours').textContent = `${restaurant.opening_time} - ${restaurant.closing_time}`;
+        document.getElementById('restaurantReviews').textContent = restaurant.total_reviews;
+        document.getElementById('restaurantCover').src = restaurant.cover_image || 'https://via.placeholder.com/1200x300';
+        
+        loadMenu(id);
+    } catch (error) {
+        console.error('Error loading restaurant:', error);
+    }
+}
+
+async function loadMenu(restaurantId) {
+    try {
+        const response = await fetch(`${API_BASE}/restaurants/${restaurantId}/menu/`);
+        const menuItems = await response.json();
+        
+        // Group by category
+        const categories = {};
+        menuItems.forEach(item => {
+            const categoryName = item.category_name || 'Other';
+            if (!categories[categoryName]) {
+                categories[categoryName] = [];
+            }
+            categories[categoryName].push(item);
+        });
+        
+        displayMenu(categories);
+    } catch (error) {
+        console.error('Error loading menu:', error);
+    }
+}
+
+function displayMenu(categories) {
+    const container = document.getElementById('menuContainer');
+    container.innerHTML = '';
+    
+    Object.keys(categories).forEach(categoryName => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'menu-category';
+        categoryDiv.innerHTML = `
+            <h4 class="fw-bold mb-3">${categoryName}</h4>
+            <div class="menu-items-container">
+                ${categories[categoryName].map(item => createMenuItemHTML(item)).join('')}
+            </div>
+        `;
+        container.appendChild(categoryDiv);
+    });
+}
+
+function createMenuItemHTML(item) {
+    const badges = [];
+    if (item.is_vegetarian) badges.push('<span class="vegetarian-badge">🥬 Veg</span>');
+    if (item.is_spicy) badges.push('<span class="spicy-badge">🌶️ Spicy</span>');
+    
+    return `
+        <div class="menu-item">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex gap-2 mb-2">
+                        ${badges.join('')}
+                    </div>
+                    <h5 class="fw-bold mb-1">${item.name}</h5>
+                    <p class="text-muted small mb-2">${item.description || 'Delicious item'}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-primary">$${item.price.toFixed(2)}</span>
+                        <div class="quantity-control" id="quantity-control-${item.id}">
+                            <button class="quantity-btn" onclick="addToCart(${item.id})">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="${item.image || 'https://via.placeholder.com/150x120'}" 
+                         class="menu-item-image" alt="${item.name}">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function addToCart(itemId) {
+    try {
+        const response = await fetch('/orders/cart/add-item/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({
+                menu_item_id: itemId,
+                quantity: 1
+            })
+        });
+        
+        if (response.ok) {
+            const cart = await response.json();
+            updateCartUI(cart);
+            
+            // Update the specific item control
+            const control = document.getElementById(`quantity-control-${itemId}`);
+            if (control) {
+                const cartItem = cart.items.find(i => i.menu_item.id === itemId);
+                if (cartItem) {
+                    control.innerHTML = `
+                        <button class="quantity-btn" onclick="updateQuantity(${itemId}, ${cartItem.quantity - 1})">-</button>
+                        <span>${cartItem.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${itemId}, ${cartItem.quantity + 1})">+</button>
+                    `;
+                }
+            }
+        } else {
+            // Handle error (user not logged in, etc.)
+            alert('Please login to add items to cart');
+            window.location.href = '/login/';
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+    }
+}
+
+async function updateQuantity(itemId, newQuantity) {
+    if (newQuantity <= 0) {
+        removeFromCart(itemId);
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/orders/cart/update-item/${itemId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({ quantity: newQuantity })
+        });
+        
+        if (response.ok) {
+            const cart = await response.json();
+            updateCartUI(cart);
+            
+            const control = document.getElementById(`quantity-control-${itemId}`);
+            if (control) {
+                const cartItem = cart.items.find(i => i.menu_item.id === itemId);
+                if (cartItem) {
+                    control.innerHTML = `
+                        <button class="quantity-btn" onclick="updateQuantity(${itemId}, ${cartItem.quantity - 1})">-</button>
+                        <span>${cartItem.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${itemId}, ${cartItem.quantity + 1})">+</button>
+                    `;
+                } else {
+                    control.innerHTML = `<button class="quantity-btn" onclick="addToCart(${itemId})">+ Add</button>`;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error updating quantity:', error);
+    }
+}
+
+async function removeFromCart(itemId) {
+    try {
+        const response = await fetch(`/orders/cart/remove-item/${itemId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            }
+        });
+        
+        if (response.ok) {
+            const cart = await response.json();
+            updateCartUI(cart);
+            
+            const control = document.getElementById(`quantity-control-${itemId}`);
+            if (control) {
+                control.innerHTML = `<button class="quantity-btn" onclick="addToCart(${itemId})">+ Add</button>`;
+            }
+        }
+    } catch (error) {
+        console.error('Error removing from cart:', error);
+    }
+}
+
+async function loadCart() {
+    try {
+        const response = await fetch('/orders/cart/');
+        if (response.ok) {
+            const cart = await response.json();
+            updateCartUI(cart);
+        }
+    } catch (error) {
+        console.error('Error loading cart:', error);
+    }
+}
+
+function updateCartUI(cart) {
+    const count = cart.total_items || 0;
+    document.getElementById('cartCount').textContent = count;
+}
+
+function goToCart() {
+    window.location.href = '/cart/';
+}
+
+function getCSRFToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Load restaurant from URL
+window.addEventListener('DOMContentLoaded', () => {
+    const pathParts = window.location.pathname.split('/');
+    const restaurantId = pathParts[pathParts.length - 2];
+    
+    if (restaurantId && !isNaN(restaurantId)) {
+        loadRestaurant(restaurantId);
+        loadCart();
+    }
+});
+</script>
+</body>
+</html>
